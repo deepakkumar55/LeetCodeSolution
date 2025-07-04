@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-th Character in String Game II</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1>3307. Find the K-th Character in String Game II</h1>
+                <div class="difficulty-badge">
+                    <i class="fas fa-star"></i>
+                    Hard
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="complexity-time">O(n)</div>
+                    <div class="stat-label">Time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="complexity-space">O(1)</div>
+                    <div class="stat-label">Space</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="operations-count">0</div>
+                    <div class="stat-label">Operations</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="problem-description">
+            <h2><i class="fas fa-book"></i> Problem Description</h2>
+            <p>Alice and Bob are playing a game. Initially, Alice has a string word = "a".</p>
+            <div class="operations-info">
+                <div class="operation">
+                    <div class="op-icon">0</div>
+                    <div class="op-content">
+                        <span class="op-type">Operation 0:</span>
+                        <span>Append a copy of word to itself</span>
+                    </div>
+                </div>
+                <div class="operation">
+                    <div class="op-icon">1</div>
+                    <div class="op-content">
+                        <span class="op-type">Operation 1:</span>
+                        <span>Generate new string by changing each character to its next character, then append</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <h2><i class="fas fa-keyboard"></i> Input Parameters</h2>
+            <div class="input-container">
+                <div class="input-group">
+                    <label for="k-input">
+                        <i class="fas fa-search"></i>
+                        K (Position to find):
+                        <span class="tooltip" data-tooltip="Enter the position of the character you want to find (1-indexed)">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" id="k-input" min="1" max="1000000000000000" value="5" placeholder="Enter k value">
+                        <div class="input-indicator"></div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="operations-input">
+                        <i class="fas fa-cogs"></i>
+                        Operations (comma-separated 0s and 1s):
+                        <span class="tooltip" data-tooltip="Enter operations as comma-separated values. 0 = duplicate, 1 = transform and append">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" id="operations-input" value="0,0,0" placeholder="e.g., 0,1,0,1">
+                        <div class="input-indicator"></div>
+                    </div>
+                </div>
+                <button class="solve-btn" onclick="solveGame()">
+                    <span class="btn-text">Solve Game</span>
+                    <span class="btn-icon"><i class="fas fa-play"></i></span>
+                    <div class="btn-loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div class="progress-section" id="progress-section">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+                <div class="progress-text" id="progress-text">Processing...</div>
+            </div>
+        </div>
+
+        <div class="visualization-section">
+            <h2><i class="fas fa-eye"></i> Step-by-Step Visualization</h2>
+            <div class="viz-controls">
+                <button class="control-btn" onclick="playAnimation()">
+                    <i class="fas fa-play"></i> Play
+                </button>
+                <button class="control-btn" onclick="pauseAnimation()">
+                    <i class="fas fa-pause"></i> Pause
+                </button>
+                <button class="control-btn" onclick="resetAnimation()">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+                <div class="speed-control">
+                    <label>Speed:</label>
+                    <input type="range" id="speed-slider" min="0.5" max="3" step="0.1" value="1">
+                    <span id="speed-value">1x</span>
+                </div>
+            </div>
+            <div class="steps-container" id="steps-container">
+                <!-- Steps will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="result-section">
+            <h2><i class="fas fa-trophy"></i> Result</h2>
+            <div class="result-display" id="result-display">
+                <div class="result-animation">
+                    <div class="result-value" id="result-value">-</div>
+                    <div class="result-label">K-th Character</div>
+                </div>
+                <div class="result-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Position:</span>
+                        <span class="detail-value" id="position-value">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Final Length:</span>
+                        <span class="detail-value" id="length-value">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Operations:</span>
+                        <span class="detail-value" id="ops-value">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="algorithm-explanation">
+            <h2><i class="fas fa-brain"></i> Algorithm Explanation</h2>
+            <div class="algo-tabs">
+                <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+                <button class="tab-btn" onclick="showTab('complexity')">Complexity</button>
+                <button class="tab-btn" onclick="showTab('optimization')">Optimization</button>
+            </div>
+            <div class="tab-content active" id="overview-tab">
+                <div class="algo-steps">
+                    <div class="algo-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Initialize</h3>
+                            <p>Start with word = "a"</p>
+                        </div>
+                    </div>
+                    <div class="algo-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Process Operations</h3>
+                            <p>For each operation, either duplicate (0) or transform and append (1)</p>
+                        </div>
+                    </div>
+                    <div class="algo-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Find K-th Character</h3>
+                            <p>Return the character at position k (1-indexed)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="complexity-tab">
+                <div class="complexity-analysis">
+                    <div class="complexity-item">
+                        <h3>Time Complexity</h3>
+                        <div class="complexity-value">O(n)</div>
+                        <p>Where n is the number of operations</p>
+                    </div>
+                    <div class="complexity-item">
+                        <h3>Space Complexity</h3>
+                        <div class="complexity-value">O(1)</div>
+                        <p>Optimized approach uses constant extra space</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="optimization-tab">
+                <div class="optimization-content">
+                    <h3>Mathematical Optimization</h3>
+                    <p>For large k values, we use bit manipulation and mathematical properties to avoid generating the entire string.</p>
+                    <div class="code-block">
+                        <pre><code>// Optimized approach for large k
+function findKthCharacter(k, operations) {
+    // Use mathematical properties
+    // Track position and increments
+    // Avoid string generation
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="examples-section">
+            <h2><i class="fas fa-lightbulb"></i> Examples</h2>
+            <div class="example-cards">
+                <div class="example-card" onclick="loadExample(1)">
+                    <div class="example-header">
+                        <h3>Example 1</h3>
+                        <div class="example-badge">Easy</div>
+                    </div>
+                    <div class="example-content">
+                        <p><strong>Input:</strong> k = 5, operations = [0,0,0]</p>
+                        <p><strong>Output:</strong> "a"</p>
+                    </div>
+                    <div class="example-footer">
+                        <i class="fas fa-mouse-pointer"></i> Click to load
+                    </div>
+                </div>
+                <div class="example-card" onclick="loadExample(2)">
+                    <div class="example-header">
+                        <h3>Example 2</h3>
+                        <div class="example-badge">Medium</div>
+                    </div>
+                    <div class="example-content">
+                        <p><strong>Input:</strong> k = 10, operations = [0,1,0,1]</p>
+                        <p><strong>Output:</strong> "b"</p>
+                    </div>
+                    <div class="example-footer">
+                        <i class="fas fa-mouse-pointer"></i> Click to load
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="performance-section">
+            <h2><i class="fas fa-chart-line"></i> Performance Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-clock"></i></div>
+                    <div class="metric-content">
+                        <div class="metric-value" id="execution-time">0ms</div>
+                        <div class="metric-label">Execution Time</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-memory"></i></div>
+                    <div class="metric-content">
+                        <div class="metric-value" id="memory-usage">0KB</div>
+                        <div class="metric-label">Memory Usage</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+                    <div class="metric-content">
+                        <div class="metric-value" id="string-length">0</div>
+                        <div class="metric-label">Final String Length</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
