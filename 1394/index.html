@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Lucky Integer in an Array</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+        <div class="floating-shape shape-5"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1>1394. Find Lucky Integer in an Array</h1>
+                <div class="difficulty-badge">
+                    <i class="fas fa-star"></i>
+                    Easy
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <div class="stat-value">O(n)</div>
+                    <div class="stat-label">Time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">O(n)</div>
+                    <div class="stat-label">Space</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="acceptance-rate">70.1%</div>
+                    <div class="stat-label">Acceptance</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="problem-description">
+            <h2><i class="fas fa-book"></i> Problem Description</h2>
+            <p>Given an array of integers <code>arr</code>, a <strong>lucky integer</strong> is an integer that has a frequency in the array equal to its value.</p>
+            <p>Return the <strong>largest lucky integer</strong> in the array. If there is no lucky integer return <code>-1</code>.</p>
+            
+            <div class="lucky-definition">
+                <div class="definition-card">
+                    <div class="definition-icon">🍀</div>
+                    <div class="definition-content">
+                        <h3>Lucky Integer</h3>
+                        <p>An integer where <strong>frequency = value</strong></p>
+                        <div class="definition-example">
+                            <code>Value: 3, Frequency: 3 → Lucky! ✨</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <h2><i class="fas fa-keyboard"></i> Input Array</h2>
+            <div class="input-container">
+                <div class="input-group">
+                    <label for="array-input">
+                        <i class="fas fa-list"></i>
+                        Array (comma-separated integers):
+                        <span class="tooltip" data-tooltip="Enter integers separated by commas. Range: 1-500">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" id="array-input" value="2,2,3,4" placeholder="e.g., 2,2,3,4">
+                        <div class="input-indicator"></div>
+                    </div>
+                    <div class="input-preview" id="input-preview">
+                        <!-- Array preview will be shown here -->
+                    </div>
+                </div>
+                <button class="solve-btn" onclick="solveLuckyInteger()">
+                    <span class="btn-text">Find Lucky Integer</span>
+                    <span class="btn-icon"><i class="fas fa-search"></i></span>
+                    <div class="btn-loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div class="step-visualization">
+            <h2><i class="fas fa-eye"></i> Step-by-Step Process</h2>
+            <div class="steps-container" id="steps-container">
+                <!-- Steps will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="progress-section" id="progress-section">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+                <div class="progress-text" id="progress-text">Analyzing...</div>
+            </div>
+        </div>
+
+        <div class="visualization-section">
+            <h2><i class="fas fa-chart-bar"></i> Frequency Analysis</h2>
+            <div class="viz-controls">
+                <button class="control-btn" onclick="playAnimation()">
+                    <i class="fas fa-play"></i> Play
+                </button>
+                <button class="control-btn" onclick="pauseAnimation()">
+                    <i class="fas fa-pause"></i> Pause
+                </button>
+                <button class="control-btn" onclick="resetAnimation()">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+                <div class="view-toggle">
+                    <label>View:</label>
+                    <select id="view-mode" onchange="changeViewMode()">
+                        <option value="frequency">Frequency Table</option>
+                        <option value="chart">Bar Chart</option>
+                        <option value="both">Both</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="analysis-container">
+                <div class="frequency-table" id="frequency-table">
+                    <!-- Frequency table will be populated here -->
+                </div>
+                <div class="frequency-chart" id="frequency-chart">
+                    <!-- Chart will be rendered here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="result-section">
+            <h2><i class="fas fa-trophy"></i> Result</h2>
+            <div class="result-display" id="result-display">
+                <div class="result-animation">
+                    <div class="result-value" id="result-value">-</div>
+                    <div class="result-label">Lucky Integer</div>
+                </div>
+                <div class="result-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Array Length:</span>
+                        <span class="detail-value" id="array-length">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Unique Numbers:</span>
+                        <span class="detail-value" id="unique-count">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Lucky Numbers:</span>
+                        <span class="detail-value" id="lucky-count">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="algorithm-explanation">
+            <h2><i class="fas fa-brain"></i> Algorithm Explanation</h2>
+            <div class="algo-tabs">
+                <button class="tab-btn active" onclick="showTab('steps')">Steps</button>
+                <button class="tab-btn" onclick="showTab('complexity')">Complexity</button>
+                <button class="tab-btn" onclick="showTab('code')">Code</button>
+            </div>
+            
+            <div class="tab-content active" id="steps-tab">
+                <div class="algo-steps">
+                    <div class="algo-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Count Frequencies</h3>
+                            <p>Create a frequency map to count occurrences of each number</p>
+                        </div>
+                    </div>
+                    <div class="algo-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Find Lucky Numbers</h3>
+                            <p>Check each number where frequency equals the value</p>
+                        </div>
+                    </div>
+                    <div class="algo-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Return Maximum</h3>
+                            <p>Return the largest lucky number, or -1 if none exist</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="complexity-tab">
+                <div class="complexity-analysis">
+                    <div class="complexity-item">
+                        <h3>Time Complexity</h3>
+                        <div class="complexity-value">O(n)</div>
+                        <p>Single pass to count frequencies + single pass to find lucky numbers</p>
+                    </div>
+                    <div class="complexity-item">
+                        <h3>Space Complexity</h3>
+                        <div class="complexity-value">O(n)</div>
+                        <p>HashMap to store frequency counts</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="code-tab">
+                <div class="code-section">
+                    <h3>JavaScript Implementation</h3>
+                    <div class="code-block">
+                        <pre><code>function findLucky(arr) {
+    // Count frequencies
+    const freq = new Map();
+    for (const num of arr) {
+        freq.set(num, (freq.get(num) || 0) + 1);
+    }
+    
+    // Find lucky numbers
+    let maxLucky = -1;
+    for (const [num, count] of freq) {
+        if (num === count) {
+            maxLucky = Math.max(maxLucky, num);
+        }
+    }
+    
+    return maxLucky;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="examples-section">
+            <h2><i class="fas fa-lightbulb"></i> Examples</h2>
+            <div class="example-cards">
+                <div class="example-card" onclick="loadExample(1)">
+                    <div class="example-header">
+                        <h3>Example 1</h3>
+                        <div class="example-badge">Simple</div>
+                    </div>
+                    <div class="example-content">
+                        <p><strong>Input:</strong> [2,2,3,4]</p>
+                        <p><strong>Output:</strong> 2</p>
+                        <p><strong>Explanation:</strong> Only 2 appears 2 times</p>
+                    </div>
+                    <div class="example-footer">
+                        <i class="fas fa-mouse-pointer"></i> Click to load
+                    </div>
+                </div>
+                
+                <div class="example-card" onclick="loadExample(2)">
+                    <div class="example-header">
+                        <h3>Example 2</h3>
+                        <div class="example-badge">Multiple</div>
+                    </div>
+                    <div class="example-content">
+                        <p><strong>Input:</strong> [1,2,2,3,3,3]</p>
+                        <p><strong>Output:</strong> 3</p>
+                        <p><strong>Explanation:</strong> 1, 2, and 3 are lucky. Return max: 3</p>
+                    </div>
+                    <div class="example-footer">
+                        <i class="fas fa-mouse-pointer"></i> Click to load
+                    </div>
+                </div>
+                
+                <div class="example-card" onclick="loadExample(3)">
+                    <div class="example-header">
+                        <h3>Example 3</h3>
+                        <div class="example-badge">No Lucky</div>
+                    </div>
+                    <div class="example-content">
+                        <p><strong>Input:</strong> [2,2,2,3,3]</p>
+                        <p><strong>Output:</strong> -1</p>
+                        <p><strong>Explanation:</strong> No lucky numbers exist</p>
+                    </div>
+                    <div class="example-footer">
+                        <i class="fas fa-mouse-pointer"></i> Click to load
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div class="performance-section">
+            <h2><i class="fas fa-chart-line"></i> Performance Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-clock"></i></div>
+                    <div class="metric-content">
+                        <div class="metric-value" id="execution-time">0ms</div>
+                        <div class="metric-label">Execution Time</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-memory"></i></div>
+                    <div class="metric-content">
+                        <div class="metric-value" id="memory-usage">0KB</div>
+                        <div class="metric-label">Memory Usage</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-list-ol"></i></div>
+                    <div class="metric-content">
+                        <div class="metric-value" id="operations-count">0</div>
+                        <div class="metric-label">Operations</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hints-section">
+            <h2><i class="fas fa-lightbulb"></i> Hints</h2>
+            <div class="hints-container">
+                <div class="hint-card" onclick="toggleHint(1)">
+                    <div class="hint-header">
+                        <h3>Hint 1</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="hint-content">
+                        <p>Count the frequency of each number in the array using a HashMap or frequency array.</p>
+                    </div>
+                </div>
+                <div class="hint-card" onclick="toggleHint(2)">
+                    <div class="hint-header">
+                        <h3>Hint 2</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="hint-content">
+                        <p>A number is lucky if its frequency equals its value. Check this condition for each unique number.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
